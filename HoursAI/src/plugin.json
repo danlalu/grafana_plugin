@@ -1,0 +1,41 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "datasource",
+  "name": "HoursAI",
+  "id": "HoursAI",
+  "metrics": true,
+  "backend": true,
+  "executable": "gpx_hoursAI",
+  "alerting": true,
+  "info": {
+    "description": "HoursAI",
+    "author": {
+      "name": "lexi.liu,hongjie.li",
+      "url": ""
+    },
+    "keywords": [
+      "HoursAI"
+    ],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [
+      {
+        "name": "Website",
+        "url": "https://github.com/grafana/grafana-datasource-backend-cloudwise"
+      },
+      {
+        "name": "License",
+        "url": "https://github.com/grafana/grafana-datasource-backend-cloudwise/blob/master/LICENSE"
+      }
+    ],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaDependency": ">=7.0.0",
+    "plugins": []
+  }
+}
