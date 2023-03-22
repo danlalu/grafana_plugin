@@ -1,0 +1,66 @@
+{
+  "_from": "monaco-promql",
+  "_id": "monaco-promql@1.7.4",
+  "_inBundle": false,
+  "_integrity": "sha512-ehiDBi7or/ndoRL98Lj9NgttXcAKNlH85OatV1bfdpseeVA8ziUm7Yi7mhICW6ORc7FZDDfUFcYg0SVrFYEpnw==",
+  "_location": "/monaco-promql",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "monaco-promql",
+    "name": "monaco-promql",
+    "escapedName": "monaco-promql",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmmirror.com/monaco-promql/-/monaco-promql-1.7.4.tgz",
+  "_shasum": "64feb0850cba5d62255b7c952e919ba124b0413d",
+  "_spec": "monaco-promql",
+  "_where": "/usr/local/Cellar/grafana-9.2.3/plugins/cloudwise-plugin",
+  "bugs": {
+    "url": "https://github.com/prometheus-community/monaco-promql/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Bundle of promql language for the Monaco Editor.",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
+    "eslint": "^7.22.0",
+    "jsdom": "^15.1.1",
+    "mocha": "^8.3.2",
+    "monaco-editor": "*",
+    "monaco-plugin-helpers": "^1.0.3",
+    "requirejs": "^2.3.6",
+    "typescript": "^4.2.3",
+    "uglify-js": "^3.13.1"
+  },
+  "homepage": "https://github.com/prometheus-community/monaco-promql#readme",
+  "keywords": [
+    "promql",
+    "monaco",
+    "monaco-editor",
+    "prometheus"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "monaco-promql",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prometheus-community/monaco-promql.git"
+  },
+  "scripts": {
+    "build": "mrmdir ./lib && tsc -p ./src/tsconfig.json",
+    "lint": "eslint src/ --ext .ts",
+    "test": "mocha",
+    "watch": "tsc -p ./src --watch"
+  },
+  "types": "index.d.ts",
+  "version": "1.7.4"
+}
