@@ -1,19 +1,19 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "datasource",
-  "name": "hours-ai",
+  "name": "hoursai",
   "id": "hoursai-datasource",
   "metrics": true,
   "backend": true,
-  "executable": "gpx_hoursAI",
+  "executable": "gpx_hoursai",
   "alerting": true,
   "info": {
-    "description": "HoursAI",
+    "description": "hoursai",
     "author": {
       "name": "lexi.liu,hongjie.li"
     },
     "keywords": [
-      "HoursAI"
+      "hoursai"
     ],
     "logos": {
       "small": "img/logo.svg",
