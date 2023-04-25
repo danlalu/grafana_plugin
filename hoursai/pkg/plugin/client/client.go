@@ -137,12 +137,22 @@ func (c *Client) QueryLabelNames(ctx context.Context, start int64, end int64, he
 }
 
 func (c *Client) QuerySeries(ctx context.Context, start int64, end int64, match string,
-	headers http.Header) (*http.Response, error) {
-	u, err := c.createUrl("api/v1/series", map[string]string{
-		//"start":   formatTime(time.Unix(start, 0)),
-		//"end":     formatTime(time.Unix(end, 0)),
-		"match[]": match,
-	})
+	headers http.Header, needTime bool) (*http.Response, error) {
+	var (
+		u   *url.URL
+		err error
+	)
+	if needTime {
+		u, err = c.createUrl("api/v1/series", map[string]string{
+			"start":   formatTime(time.Unix(start, 0)),
+			"end":     formatTime(time.Unix(end, 0)),
+			"match[]": match,
+		})
+	} else {
+		u, err = c.createUrl("api/v1/series", map[string]string{
+			"match[]": match,
+		})
+	}
 	if err != nil {
 		return nil, err
 	}

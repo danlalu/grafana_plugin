@@ -66,18 +66,16 @@ func (s *QueryData) Execute(ctx context.Context, req *backend.QueryDataRequest) 
 			return &result, err
 		}
 		r := &backend.DataResponse{}
-		if query.QueryType != "realtimeResultSingle" {
-			r, err = s.fetch(ctx, s.client, query, req.Headers)
-			if err != nil {
-				log.DefaultLogger.Error("Fetch data from prometheus error, error is: ", err)
-				return &result, err
-			}
-			if len(r.Frames) == 0 {
-				log.DefaultLogger.Error("Received nil response from runQuery", "query", query.Expr)
-				log.DefaultLogger.Info("Final result is: ", r)
-				result.Responses[query.RefId] = *r
-				continue
-			}
+		r, err = s.fetch(ctx, s.client, query, req.Headers)
+		if err != nil {
+			log.DefaultLogger.Error("Fetch data from prometheus error, error is: ", err)
+			return &result, err
+		}
+		if len(r.Frames) == 0 {
+			log.DefaultLogger.Error("Received nil response from runQuery", "query", query.Expr)
+			log.DefaultLogger.Info("Final result is: ", r)
+			result.Responses[query.RefId] = *r
+			continue
 		}
 		// 调用算法接口
 		r, err = algorithm.CallAlgorithm(ctx, r, query)
@@ -170,10 +168,9 @@ func (s *QueryData) exemplarQuery(ctx context.Context, c *client.Client, q *mode
 
 func (s *QueryData) CallAlgorithmBackend(ctx context.Context, body []byte, jsonMap map[string]string,
 	operationType string) ([]byte, error) {
-	return algorithm.CallCore(ctx, body, jsonMap, operationType, s.TimeInterval, s.intervalCalculator, s.JsonData,
-		s.client)
+	return algorithm.CallCore(ctx, body, jsonMap, operationType, s.client)
 }
 
 func (s *QueryData) CallPrometheus(ctx context.Context, body []byte, operationType string) ([]byte, error) {
-	return algorithm.CallPrometheusMetadata(ctx, body, operationType, s.client)
+	return algorithm.CallPrometheusMetadata(ctx, body, operationType, s.client, false)
 }

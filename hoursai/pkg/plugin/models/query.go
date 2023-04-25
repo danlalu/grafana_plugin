@@ -37,25 +37,27 @@ var safeResolution = 11000
 var defaultTimeInterval = 15 * time.Second
 
 type QueryModel struct {
-	Expr            string `json:"expr"`
-	LegendFormat    string `json:"legendFormat"`
-	Interval        string `json:"interval"`
-	IntervalMS      int64  `json:"intervalMS"`
-	StepMode        string `json:"stepMode"`
-	RangeQuery      bool   `json:"range"`
-	InstantQuery    bool   `json:"instant"`
-	ExemplarQuery   bool   `json:"exemplar"`
-	IntervalFactor  int64  `json:"intervalFactor"`
-	UtcOffsetSec    int64  `json:"utcOffsetSec"`
-	GenericId       string `json:"genericId"`
-	QueryType       string `json:"queryType"`
-	AlgorithmList   bool   `json:"algorithmList"`
-	TaskId          string `json:"A_Realtime_Save"`
-	AlertEnable     bool   `json:"alertEnable"`
-	AlertTemplateId int64  `json:"alertTemplateId"`
-	PanelId         int64  `json:"panelId"`
-	DashboardUID    string `json:"dashboardUID"`
-	Series          string `json:"series"`
+	Expr            string   `json:"expr"`
+	LegendFormat    string   `json:"legendFormat"`
+	Interval        string   `json:"interval"`
+	IntervalMS      int64    `json:"intervalMS"`
+	StepMode        string   `json:"stepMode"`
+	RangeQuery      bool     `json:"range"`
+	InstantQuery    bool     `json:"instant"`
+	ExemplarQuery   bool     `json:"exemplar"`
+	IntervalFactor  int64    `json:"intervalFactor"`
+	UtcOffsetSec    int64    `json:"utcOffsetSec"`
+	Name            string   `json:"name"`
+	Version         string   `json:"version"`
+	Params          string   `json:"params"`
+	QueryType       string   `json:"queryType"`
+	AlgorithmList   bool     `json:"algorithmList"`
+	TaskInfo        []string `json:"A_Realtime_Save"`
+	AlertEnable     bool     `json:"alertEnable"`
+	AlertTemplateId int64    `json:"alertTemplateId"`
+	PanelId         int64    `json:"panelId"`
+	DashboardUID    string   `json:"dashboardUID"`
+	Series          string   `json:"series"`
 }
 
 type TimeRange struct {
@@ -75,11 +77,13 @@ type Query struct {
 	RangeQuery      bool
 	ExemplarQuery   bool
 	UtcOffsetSec    int64
-	GenericId       string
+	Name            string
+	Version         string
+	Params          string
 	QueryType       string
 	JsonData        json.RawMessage
 	AlgorithmList   bool
-	TaskId          string
+	TaskInfo        []string
 	AlertEnable     bool
 	AlertTemplateId int64
 	PanelId         int64
@@ -137,11 +141,13 @@ func Parse(query backend.DataQuery, timeInterval string, intervalCalculator inte
 		RangeQuery:      rangeQuery,
 		ExemplarQuery:   model.ExemplarQuery,
 		UtcOffsetSec:    model.UtcOffsetSec,
-		GenericId:       model.GenericId,
+		Name:            model.Name,
+		Version:         model.Version,
+		Params:          model.Params,
 		QueryType:       model.QueryType,
 		JsonData:        jsonData,
 		AlgorithmList:   model.AlgorithmList,
-		TaskId:          model.TaskId,
+		TaskInfo:        model.TaskInfo,
 		AlertEnable:     model.AlertEnable,
 		AlertTemplateId: model.AlertTemplateId,
 		PanelId:         model.PanelId,

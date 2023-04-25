@@ -6,6 +6,7 @@ import (
 	"fmt"
 	client "github.com/grafana/grafana-datasource-backend-cloudwise/pkg/plugin/client"
 	"github.com/grafana/grafana-datasource-backend-cloudwise/pkg/plugin/querydata"
+	"github.com/grafana/grafana-datasource-backend-cloudwise/pkg/plugin/util"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"io/ioutil"
 	"net/http"
@@ -16,18 +17,6 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-)
-
-const (
-	realtimeTaskSaveType   = "realtimeTaskSave"
-	realtimeTaskRemoveType = "realtimeTaskRemove"
-	createAlertType        = "createAlert"
-	removeAlertType        = "removeAlert"
-	algorithmListType      = "algorithmList"
-	realtimeTaskListType   = "realtimeTaskList"
-	metricsType            = "metrics"
-	labelNamesType         = "labelNames"
-	seriesType             = "series"
 )
 
 type Datasource struct {
@@ -185,6 +174,7 @@ func (d *Datasource) CallResource(ctx context.Context, req *backend.CallResource
 			Body:   []byte(err.Error()),
 		})
 	}
+
 	// 解析出managerUrl字段
 	jsonMap := make(map[string]string)
 	if err := json.Unmarshal(instance.JsonData, &jsonMap); err != nil {
@@ -194,120 +184,50 @@ func (d *Datasource) CallResource(ctx context.Context, req *backend.CallResource
 			Body:   []byte(err.Error()),
 		})
 	}
+	// 处理json数据
+	var bodyMap map[string]interface{}
+	if err = json.Unmarshal(req.Body, &bodyMap); err != nil {
+		log.DefaultLogger.Error("Body to map error, error is: ", err)
+		return sender.Send(&backend.CallResourceResponse{
+			Status: http.StatusInternalServerError,
+			Body:   []byte(err.Error()),
+		})
+	}
+	if manageUrl, ok := bodyMap["hoursAIUrl"]; ok {
+		jsonMap["managerUrl"] = manageUrl.(string)
+	}
+
+	log.DefaultLogger.Info("Json map is: ", jsonMap)
+	var response []byte
 	switch req.Path {
-	case "createAlert":
-		response, err := instance.CallAlgorithmBackend(ctx, req.Body, jsonMap, createAlertType)
-		if err != nil {
-			return sender.Send(&backend.CallResourceResponse{
-				Status: http.StatusInternalServerError,
-				Body:   []byte(err.Error()),
-			})
-		}
-		return sender.Send(&backend.CallResourceResponse{
-			Status: http.StatusOK,
-			Body:   response,
-		})
-	case "removeAlert":
-		response, err := instance.CallAlgorithmBackend(ctx, req.Body, jsonMap, removeAlertType)
-		if err != nil {
-			return sender.Send(&backend.CallResourceResponse{
-				Status: http.StatusInternalServerError,
-				Body:   []byte(err.Error()),
-			})
-		}
-		return sender.Send(&backend.CallResourceResponse{
-			Status: http.StatusOK,
-			Body:   response,
-		})
-	case "realtimeTaskSave":
-		response, err := instance.CallAlgorithmBackend(ctx, req.Body, jsonMap, realtimeTaskSaveType)
-		if err != nil {
-			return sender.Send(&backend.CallResourceResponse{
-				Status: http.StatusInternalServerError,
-				Body:   []byte(err.Error()),
-			})
-		}
-		return sender.Send(&backend.CallResourceResponse{
-			Status: http.StatusOK,
-			Body:   response,
-		})
-	case "realtimeTaskRemove":
-		response, err := instance.CallAlgorithmBackend(ctx, req.Body, jsonMap, realtimeTaskRemoveType)
-		if err != nil {
-			return sender.Send(&backend.CallResourceResponse{
-				Status: http.StatusInternalServerError,
-				Body:   []byte(err.Error()),
-			})
-		}
-		return sender.Send(&backend.CallResourceResponse{
-			Status: http.StatusOK,
-			Body:   response,
-		})
-	case "algorithmList":
-		response, err := instance.CallAlgorithmBackend(ctx, req.Body, jsonMap, algorithmListType)
-		if err != nil {
-			return sender.Send(&backend.CallResourceResponse{
-				Status: http.StatusInternalServerError,
-				Body:   []byte(err.Error()),
-			})
-		}
-		return sender.Send(&backend.CallResourceResponse{
-			Status: http.StatusOK,
-			Body:   response,
-		})
-	case "realtimeTaskList":
-		response, err := instance.CallAlgorithmBackend(ctx, req.Body, jsonMap, realtimeTaskListType)
-		if err != nil {
-			return sender.Send(&backend.CallResourceResponse{
-				Status: http.StatusInternalServerError,
-				Body:   []byte(err.Error()),
-			})
-		}
-		return sender.Send(&backend.CallResourceResponse{
-			Status: http.StatusOK,
-			Body:   response,
-		})
-	case "metrics":
-		response, err := instance.CallPrometheus(ctx, req.Body, metricsType)
-		if err != nil {
-			return sender.Send(&backend.CallResourceResponse{
-				Status: http.StatusInternalServerError,
-				Body:   []byte(err.Error()),
-			})
-		}
-		log.DefaultLogger.Info("Metric response is: ", string(response))
-		return sender.Send(&backend.CallResourceResponse{
-			Status: http.StatusOK,
-			Body:   response,
-		})
-	case "labelNames":
-		response, err := instance.CallPrometheus(ctx, req.Body, labelNamesType)
-		if err != nil {
-			return sender.Send(&backend.CallResourceResponse{
-				Status: http.StatusInternalServerError,
-				Body:   []byte(err.Error()),
-			})
-		}
-		return sender.Send(&backend.CallResourceResponse{
-			Status: http.StatusOK,
-			Body:   response,
-		})
-	case "series":
-		response, err := instance.CallPrometheus(ctx, req.Body, seriesType)
-		if err != nil {
-			return sender.Send(&backend.CallResourceResponse{
-				Status: http.StatusInternalServerError,
-				Body:   []byte(err.Error()),
-			})
-		}
-		return sender.Send(&backend.CallResourceResponse{
-			Status: http.StatusOK,
-			Body:   response,
-		})
+	case util.AlgorithmListType:
+		response, err = instance.CallAlgorithmBackend(ctx, req.Body, jsonMap, util.AlgorithmListType)
+	case util.GenerateTokenType:
+		response, err = instance.CallAlgorithmBackend(ctx, req.Body, jsonMap, util.GenerateTokenType)
+	case util.RealtimeInitType:
+		response, err = instance.CallAlgorithmBackend(ctx, req.Body, jsonMap, util.RealtimeInitType)
+
+	case util.MetricsType:
+		response, err = instance.CallPrometheus(ctx, req.Body, util.MetricsType)
+	case util.LabelNamesType:
+		response, err = instance.CallPrometheus(ctx, req.Body, util.LabelNamesType)
+	case util.SeriesType:
+		response, err = instance.CallPrometheus(ctx, req.Body, util.SeriesType)
 	default:
 		return sender.Send(&backend.CallResourceResponse{
 			Status: http.StatusOK,
 			Body:   []byte(req.Path),
 		})
 	}
+	if err != nil {
+		return sender.Send(&backend.CallResourceResponse{
+			Status: http.StatusInternalServerError,
+			Body:   []byte(err.Error()),
+		})
+	}
+	log.DefaultLogger.Info("Metric response is: ", string(response))
+	return sender.Send(&backend.CallResourceResponse{
+		Status: http.StatusOK,
+		Body:   response,
+	})
 }
