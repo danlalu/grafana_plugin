@@ -1,14 +1,14 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "datasource",
-  "name": "hoursai",
-  "id": "hoursai-datasource",
+  "name": "liuchoudan521-hoursai",
+  "id": "liuchoudan521-hoursai-datasource",
   "metrics": true,
   "backend": true,
   "executable": "gpx_hoursai",
   "alerting": true,
   "info": {
-    "description": "hoursai",
+    "description": "HoursAI is an open-source, unified AI service that helps users address the challenge of 'data rich, but information poor' by solving observability with intelligence.",
     "author": {
       "name": "lexi.liu,hongjie.li"
     },

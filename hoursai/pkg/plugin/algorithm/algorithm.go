@@ -258,7 +258,6 @@ func CallAlgorithm(ctx context.Context, r *backend.DataResponse, q *models.Query
 		body, err = json.Marshal(realtimeResultRequest)
 	}
 
-	log.DefaultLogger.Info("Http body is: ", string(body))
 	if err != nil {
 		log.DefaultLogger.Error("Request to json error, error is: ", err)
 		return response, err
@@ -309,7 +308,6 @@ func CallCore(ctx context.Context, body []byte, jsonMap map[string]string, opera
 		c.SetMethod(http.MethodPost)
 	}
 
-	log.DefaultLogger.Info("Query body is: ", string(body))
 	resp, err := c.CallAlgorithm(ctx, body, header)
 	if err != nil {
 		log.DefaultLogger.Error("Http request to call algorithm error, error is: ", err)

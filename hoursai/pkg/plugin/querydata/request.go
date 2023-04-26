@@ -73,7 +73,7 @@ func (s *QueryData) Execute(ctx context.Context, req *backend.QueryDataRequest) 
 		}
 		if len(r.Frames) == 0 {
 			log.DefaultLogger.Error("Received nil response from runQuery", "query", query.Expr)
-			log.DefaultLogger.Info("Final result is: ", r)
+			log.DefaultLogger.Debug("Final result is: ", r)
 			result.Responses[query.RefId] = *r
 			continue
 		}

@@ -30,7 +30,7 @@ func ReadPrometheusStyleResult(iter *jsoniter.Iterator, opt Options) *backend.Da
 			log.DefaultLogger.Info("Case status: ", "key", l1Field, "value", status)
 		case "data":
 			rsp = readPrometheusData(iter, opt)
-			log.DefaultLogger.Info("Case data: ", "key", l1Field, "value", rsp)
+			log.DefaultLogger.Debug("Case data: ", "key", l1Field, "value", rsp)
 		case "error":
 			err = iter.ReadString()
 			log.DefaultLogger.Info("Case error: ", "key", l1Field, "value", err)
@@ -90,14 +90,14 @@ func readPrometheusData(iter *jsoniter.Iterator, opt Options) *backend.DataRespo
 				} else {
 					rsp = readMatrixOrVectorMulti(iter, resultType)
 				}
-				log.DefaultLogger.Info("Case result: ", "key", l1Field, "value", rsp)
+				log.DefaultLogger.Debug("Case result: ", "key", l1Field, "value", rsp)
 			case "vector":
 				if opt.VectorWideSeries {
 					rsp = readMatrixOrVectorWide(iter, resultType)
 				} else {
 					rsp = readMatrixOrVectorMulti(iter, resultType)
 				}
-				log.DefaultLogger.Info("Case vector: ", "key", l1Field, "value", rsp)
+				log.DefaultLogger.Debug("Case vector: ", "key", l1Field, "value", rsp)
 			case "streams":
 				rsp = readStream(iter)
 			case "string":

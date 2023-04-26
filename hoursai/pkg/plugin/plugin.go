@@ -47,13 +47,11 @@ func NewSampleDatasource(settings backend.DataSourceInstanceSettings) (instancem
 }
 
 func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
-	log.DefaultLogger.Info("QueryData called", "request", req)
 
 	if len(req.Queries) == 0 {
 		return &backend.QueryDataResponse{}, fmt.Errorf("query contains no queries")
 	}
 	instance, err := querydata.New(&http.Client{}, d.settings)
-	log.DefaultLogger.Info("Instance: ", instance)
 	if err != nil {
 		log.DefaultLogger.Error("Create query data instance error, error is: ", err)
 		return nil, err
@@ -65,7 +63,6 @@ func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReques
 
 func (d *Datasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult,
 	error) {
-	log.DefaultLogger.Info("CheckHealth called", "request", req)
 
 	var status backend.HealthStatus
 	var message string
@@ -99,7 +96,6 @@ func (d *Datasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRe
 // allows sending the first message.
 func (d *Datasource) SubscribeStream(_ context.Context, req *backend.SubscribeStreamRequest) (*backend.
 	SubscribeStreamResponse, error) {
-	log.DefaultLogger.Info("SubscribeStream called", "request", req)
 
 	status := backend.SubscribeStreamStatusPermissionDenied
 	if req.Path == "stream" {
@@ -115,7 +111,6 @@ func (d *Datasource) SubscribeStream(_ context.Context, req *backend.SubscribeSt
 // subscribed to the same channel.
 func (d *Datasource) RunStream(ctx context.Context, req *backend.RunStreamRequest,
 	sender *backend.StreamSender) error {
-	log.DefaultLogger.Info("RunStream called", "request", req)
 
 	// Create the same data frame as for query data.
 	frame := data.NewFrame("response")
@@ -153,7 +148,6 @@ func (d *Datasource) RunStream(ctx context.Context, req *backend.RunStreamReques
 // PublishStream is called when a client sends a message to the stream.
 func (d *Datasource) PublishStream(_ context.Context, req *backend.PublishStreamRequest) (*backend.
 	PublishStreamResponse, error) {
-	log.DefaultLogger.Info("PublishStream called", "request", req)
 
 	// Do not allow publishing at all.
 	return &backend.PublishStreamResponse{
@@ -164,9 +158,7 @@ func (d *Datasource) PublishStream(_ context.Context, req *backend.PublishStream
 func (d *Datasource) CallResource(ctx context.Context, req *backend.CallResourceRequest,
 	sender backend.CallResourceResponseSender) error {
 	// 获取后端数据源插件设置详情
-	log.DefaultLogger.Info("Request body is", string(req.Body))
 	instance, err := querydata.New(&http.Client{}, d.settings)
-	log.DefaultLogger.Info("Instance: ", instance)
 	if err != nil {
 		log.DefaultLogger.Error("Create query data instance error, error is: ", err)
 		return sender.Send(&backend.CallResourceResponse{

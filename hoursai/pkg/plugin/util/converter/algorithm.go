@@ -41,7 +41,7 @@ func ReadAlgorithmStyleResult(iter *jsoniter.Iterator, result *backend.DataRespo
 			default:
 				rsp = readAlgorithmData(iter, result, metaInfos, series)
 			}
-			log.DefaultLogger.Info("Case data: ", "key", l1Field, "value", rsp)
+			log.DefaultLogger.Debug("Case data: ", "key", l1Field, "value", rsp)
 		case "message":
 			message = iter.ReadString()
 			log.DefaultLogger.Info("Case msg: ", "key", l1Field, "value", message)
@@ -300,7 +300,7 @@ func ReadCoreStyleResult(iter *jsoniter.Iterator, responseType string) CoreRespo
 				log.DefaultLogger.Error("Incorrect response type ", l1Field)
 			}
 			result.Data = rsp
-			log.DefaultLogger.Info("Case data: ", "key", l1Field, "value", rsp)
+			log.DefaultLogger.Debug("Case data: ", "key", l1Field, "value", rsp)
 		case "message":
 			message = iter.ReadString()
 			result.Message = message
