@@ -1,6 +1,7 @@
-//+build mage
+//go:build mage
+// +build mage
 
-package main
+package hoursai
 
 import (
 	"fmt"

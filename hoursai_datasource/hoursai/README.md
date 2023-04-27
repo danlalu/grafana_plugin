@@ -4,7 +4,7 @@ With its advanced AI capabilities, HoursAI provides unified AI services that hel
 observability data, including logs, metrics, and traces. These types of data can be easily visualized on 
 various platforms such as Grafana without any additional effort.
 
-![panel view](./src/img/dashboard.jpg)
+![panel view](src/img/dashboard.jpg)
 
 
 ### Set up
@@ -14,7 +14,7 @@ It's located at {grafana}/data/plugins.
 
 ### Create a datasource
 
-![datasource create](./src/img/datasource_create.png)
+![datasource create](src/img/datasource_create.png)
 
 1. Click on the "Add data source" button
 2. Select "HoursAI" from the list
@@ -26,7 +26,7 @@ http://hoursai.cloudwise.sg/
 
 ### Create a panel
 
-![datasource create](./src/img/panel_edit.png)
+![datasource create](src/img/panel_edit.png)
 
 1. Input the query in the query field
 2. Select the AI Model from Model List

@@ -1,6 +1,7 @@
 {
   "extends": "@grafana/toolkit/src/config/tsconfig.plugin.json",
-  "include": ["src", "types"],
+  "include": [
+    "src", "types"],
   "compilerOptions": {
     "rootDir": "./src",
     "baseUrl": "./src",
